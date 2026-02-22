@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+<pre id="weather"></pre>
+
+<script>
+fetch("https://wttr.in/Jakarta?format=3")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("weather").innerText = data;
+  });
+</script>
+
+</body>
+</html>
