@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Weather Engine</title>
+
+  <meta name="description" content="Modern weather platform with hourly and 7-day forecast.">
+  <meta name="theme-color" content="#0f172a">
+
+  <meta name="application-name" content="Weather Engine">
+  <meta name="apple-mobile-web-app-title" content="Weather Engine">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta property="og:title" content="Weather Engine">
+  <meta property="og:description" content="Modern weather forecast platform.">
+  <meta property="og:type" content="website">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
+  <link rel="icon" href="./assets/icons/favicon.ico">
+
+  <link rel="dns-prefetch" href="//wttr.in">
+  <link rel="preconnect" href="https://wttr.in" crossorigin>
+
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- <style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  transition:.4s ease;
+}
+
+body.day{
+  background:linear-gradient(135deg,#3b82f6,#0ea5e9);
+  color:#fff;
+}
+
+body.night{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
+}
+
+.container{
+  width:100%;
+  max-width:700px;
+  background:rgba(255,255,255,0.08);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+h1{text-align:center;margin-bottom:20px}
+
+.search{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+input{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.weather-main{text-align:center;margin-bottom:20px}
+
+.temp{font-size:56px;font-weight:bold}
+
+.icon{font-size:50px}
+
+.hourly{
+  margin-top:20px;
+}
+
+canvas{
+  width:100%;
+  height:150px;
+  margin-top:10px;
+}
+
+.loading,.error{text-align:center;opacity:.8}
+
+.daily-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+
+.day-card{
+  background:rgba(255,255,255,0.1);
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  font-size:14px;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.2),transparent 60%);
+  animation:move 10s infinite alternate ease-in-out;
+  z-index:-1;
+}
+
+@keyframes move{
+  from{transform:translateY(-10px)}
+  to{transform:translateY(10px)}
+}
+</style> -->
+
+</head>
+
+<body class="night">
+  <div class="container">
+    <h1>Weather Engine</h1>
+
+    <div class="search">
+      <label for="city" class="visually-hidden">City</label>
+      <input id="city" type="text" placeholder="Enter city..." autocomplete="off" />
+      <button id="searchBtn" type="button">Search</button>
+      <button id="toggleUnit" type="button">°C / °F</button>
+    </div>
+
+    <div id="weather">
+      <div class="loading">Loading...</div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+
+  <script nomodule>
+    alert("Your browser is not supported. Please update to a modern browser.");
+  </script>
+
+  <!-- <script type="module">
+import {fetchWeather} from "./js/engine.js";
+import {state} from "./js/state.js";
+import {render} from "./js/ui.js";
+
+async function init(){
+  state.city = "Tokyo";
+  state.data = await fetchWeather(state.city);
+  render(state);
+}
+
+init();
+
+const weatherDiv = document.getElementById("weather");
+const cityInput = document.getElementById("city");
+const searchBtn = document.getElementById("searchBtn");
+
+let unit = "C";
+
+function parseLocation(){
+  const params = new URLSearchParams(window.location.search);
+  const pathCity = window.location.pathname.split("/").pop();
+  return params.get("city") || (pathCity !== "Weather" ? pathCity : null) || "Kraksaan";
+}
+
+function setTheme(hour){
+  document.body.className = (hour >=6 && hour<18) ? "day" : "night";
+}
+
+function drawChart(canvas, temps){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = canvas.offsetWidth;
+  const h = canvas.height = 150;
+
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();
+  ctx.strokeStyle = "#00ffcc";
+  ctx.lineWidth = 2;
+
+  const max = Math.max(...temps);
+  const min = Math.min(...temps);
+
+  temps.forEach((t,i)=>{
+    const x = (w/(temps.length-1))*i;
+    const y = h - ((t-min)/(max-min))*h;
+    if(i===0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  });
+
+  ctx.stroke();
+}
+
+async function getWeather(city=null){
+  const location = city || cityInput.value || parseLocation();
+  weatherDiv.innerHTML = `<div class="loading">Loading...</div>`;
+
+  const cacheKey = "weather_"+location;
+  const cached = localStorage.getItem(cacheKey);
+
+  if(cached){
+    const parsed = JSON.parse(cached);
+    if(Date.now() - parsed.time < 900000){
+      renderWeather(parsed.data, location);
+      return;
+    }
+  }
+
+  try{
+    const res = await fetch(`https://wttr.in/${location}?format=j1`);
+    const data = await res.json();
+
+    if(new URLSearchParams(window.location.search).get("format")==="json"){
+      document.body.innerHTML = "<pre>"+JSON.stringify(data,null,2)+"</pre>";
+      return;
+    }
+
+    localStorage.setItem(cacheKey, JSON.stringify({
+        time:Date.now(),
+        data:data
+    }));
+
+    const current = data.current_condition[0];
+    const hourly = data.weather[0].hourly.slice(0,8);
+
+    const temp = unit==="C"?current.temp_C:current.temp_F;
+    const desc = current.weatherDesc[0].value;
+    const icon = desc.toLowerCase().includes("rain")?"🌧":
+                 desc.toLowerCase().includes("cloud")?"☁️":
+                 desc.toLowerCase().includes("sun")?"☀️":"🌤";
+
+    setTheme(new Date(current.localObsDateTime).getHours());
+
+    weatherDiv.innerHTML = `
+      <div class="weather-main">
+        <div class="icon">${icon}</div>
+        <div class="temp">${temp}°${unit}</div>
+        <div>${desc}</div>
+        <div>${location}</div>
+      </div>
+
+      <div class="hourly">
+        <strong>Next Hours</strong>
+        <canvas id="chart"></canvas>
+      </div>
+
+      <div class="daily">
+        <h3>7-Day Forecast</h3>
+        <div id="dailyGrid" class="daily-grid"></div>
+      </div>
+    `;
+
+    const dailyGrid = document.getElementById("dailyGrid");
+    dailyGrid.innerHTML = "";
+
+    data.weather.forEach(day=>{
+        dailyGrid.innerHTML += `
+            <div class="day-card">
+            <div>${day.date}</div>
+            <div>${day.avgtempC}°C</div>
+        </div>
+        `;
+    });
+
+    const temps = hourly.map(h=> unit==="C"?parseInt(h.tempC):parseInt(h.tempF));
+    drawChart(document.getElementById("chart"), temps);
+
+    history.replaceState(null,"",`?city=${location}`);
+
+  }catch(e){
+    weatherDiv.innerHTML = `<div class="error">Failed to load weather.</div>`;
+  }
+}
+
+document.getElementById("toggleUnit").addEventListener("click",()=>{
+  unit = unit==="C"?"F":"C";
+  getWeather(parseLocation());
+});
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("service-worker.js");
+}
+
+searchBtn.addEventListener("click",()=>getWeather());
+cityInput.addEventListener("keydown",e=>{if(e.key==="Enter")getWeather();});
+
+getWeather();
+</script> -->
+
+</body>
+
+</html>
