@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: .4s ease;
+}
+
+body.day {
+  background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+  color: #fff;
+}
+
+body.night {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #e2e8f0;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.5s ease, color 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+button:active {
+  transform: translateY(0);
+  opacity: 0.8;
+}
+
+.weather-main {
+  text-align: center;
+  margin-bottom: 20px
+}
+
+.temp {
+  font-size: clamp(40px, 8vw, 56px);
+  font-weight: bold
+}
+
+.icon {
+  font-size: 50px
+}
+
+.hourly {
+  margin-top: 20px;
+}
+
+canvas {
+  width: 100%;
+  height: 150px;
+  margin-top: 10px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  opacity: .8
+}
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.day-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .2), transparent 60%);
+  animation: move 10s infinite alternate ease-in-out;
+  z-index: -1;
+}
+
+@keyframes move {
+  from {
+    transform: translateY(-10px)
+  }
+
+  to {
+    transform: translateY(10px)
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+}
+
+.container {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
