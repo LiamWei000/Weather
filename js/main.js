@@ -9,7 +9,7 @@ const toggleBtn = document.getElementById("toggleUnit");
 function parseLocation() {
   const params = new URLSearchParams(window.location.search);
   const pathCity = window.location.pathname.split("/").pop();
-  return params.get("city") || (pathCity !== "Weather" ? pathCity : null) || "Tokyo";
+  return params.get("city") || (pathCity !== "Weather" ? pathCity : null) || "Washington, D.C.";
 }
 
 async function load(city) {
