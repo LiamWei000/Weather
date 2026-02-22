@@ -6,39 +6,157 @@
 <title>Weather App</title>
 
 <style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: monospace;
-    background: #0f172a;
-    color: #00ffcc;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    padding: 20px;
 }
-.card {
-    background: #111827;
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
     padding: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00ffcc;
+    font-weight: bold;
+}
+
+.weather-main {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.temp {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.desc {
+    opacity: 0.8;
+}
+
+.forecast {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.day {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    padding: 10px;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,255,200,0.2);
+    text-align: center;
+}
+
+.day h4 {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0.6;
 }
 </style>
 </head>
+
 <body>
 
-<div class="card">
-    <pre id="weather">Loading...</pre>
+<div class="container">
+    <h1>Weather</h1>
+
+    <div class="search">
+        <input id="city" placeholder="Enter city..." />
+        <button onclick="getWeather()">Search</button>
+    </div>
+
+    <div id="weather">
+        <div class="loading">Loading...</div>
+    </div>
 </div>
 
 <script>
-fetch("https://wttr.in/Kraksaan?format=3")
-    .then(res => res.text())
-    .then(data => {
-        document.getElementById("weather").innerText = data;
-    })
-    .catch(() => {
-        document.getElementById("weather").innerText = "Failed to load weather.";
-    });
+async function getWeather(city = null) {
+    const weatherDiv = document.getElementById("weather");
+    const cityInput = document.getElementById("city");
+
+    const location = city || cityInput.value || "Kraksaan";
+
+    weatherDiv.innerHTML = `<div class="loading">Loading...</div>`;
+
+    try {
+        const response = await fetch(`https://wttr.in/${location}?format=j1`);
+        const data = await response.json();
+
+        const current = data.current_condition[0];
+        const forecast = data.weather;
+
+        weatherDiv.innerHTML = `
+            <div class="weather-main">
+                <div class="temp">${current.temp_C}°C</div>
+                <div class="desc">${current.weatherDesc[0].value}</div>
+                <div>${location}</div>
+            </div>
+
+            <div class="forecast">
+                ${forecast.slice(0,3).map(day => `
+                    <div class="day">
+                        <h4>${day.date}</h4>
+                        <div>${day.maxtempC}° / ${day.mintempC}°</div>
+                    </div>
+                `).join("")}
+            </div>
+        `;
+
+    } catch (error) {
+        weatherDiv.innerHTML = `<div class="loading">Failed to load weather.</div>`;
+    }
+}
+
+getWeather();
 </script>
 
 </body>
