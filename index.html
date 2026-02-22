@@ -3,157 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weather App</title>
+<title>Weather Pro</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  transition:0.4s ease;
 }
 
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+body.day{
+  background:linear-gradient(135deg,#3b82f6,#0ea5e9);
+  color:#fff;
 }
 
-.container {
-    width: 100%;
-    max-width: 500px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+body.night{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: 600;
+.container{
+  width:100%;
+  max-width:520px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
 }
 
-.search {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+h1{text-align:center;margin-bottom:20px}
+
+.search{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
 }
 
-input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+input{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  outline:none;
 }
 
-button {
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background: #00ffcc;
-    font-weight: bold;
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.weather-main {
-    text-align: center;
-    margin-bottom: 20px;
+.controls{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:15px;
 }
 
-.temp {
-    font-size: 48px;
-    font-weight: bold;
+.weather-main{
+  text-align:center;
+  margin-bottom:20px;
 }
 
-.desc {
-    opacity: 0.8;
+.icon{
+  font-size:48px;
 }
 
-.forecast {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+.temp{
+  font-size:48px;
+  font-weight:bold;
 }
 
-.day {
-    flex: 1;
-    background: rgba(255,255,255,0.07);
-    padding: 10px;
-    border-radius: 12px;
-    text-align: center;
+.desc{opacity:0.9}
+
+.forecast{
+  display:flex;
+  gap:10px;
 }
 
-.day h4 {
-    margin-bottom: 5px;
-    font-size: 14px;
+.day-card{
+  flex:1;
+  background:rgba(255,255,255,0.12);
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  font-size:14px;
 }
 
-.loading {
-    text-align: center;
-    margin-top: 20px;
-    opacity: 0.6;
-}
+.loading{text-align:center;opacity:0.7}
 </style>
 </head>
-
-<body>
+<body class="night">
 
 <div class="container">
-    <h1>Weather</h1>
+  <h1>Weather Pro</h1>
 
-    <div class="search">
-        <input id="city" placeholder="Enter city..." />
-        <button onclick="getWeather()">Search</button>
-    </div>
+  <div class="search">
+    <input id="city" placeholder="Enter city...">
+    <button onclick="getWeather()">Search</button>
+  </div>
 
-    <div id="weather">
-        <div class="loading">Loading...</div>
-    </div>
+  <div class="controls">
+    <button onclick="detectLocation()">📍 Auto</button>
+    <button onclick="toggleUnit()">Toggle °C/°F</button>
+  </div>
+
+  <div id="weather">
+    <div class="loading">Loading...</div>
+  </div>
 </div>
 
 <script>
-async function getWeather(city = null) {
-    const weatherDiv = document.getElementById("weather");
-    const cityInput = document.getElementById("city");
+let unit = "C";
 
-    const location = city || cityInput.value || "Kraksaan";
+function getIcon(desc){
+  desc = desc.toLowerCase();
+  if(desc.includes("sun")) return "☀️";
+  if(desc.includes("cloud")) return "☁️";
+  if(desc.includes("rain")) return "🌧";
+  if(desc.includes("storm")) return "⛈";
+  if(desc.includes("snow")) return "❄️";
+  return "🌤";
+}
 
-    weatherDiv.innerHTML = `<div class="loading">Loading...</div>`;
+function setTheme(hour){
+  if(hour >= 6 && hour < 18){
+    document.body.className = "day";
+  } else {
+    document.body.className = "night";
+  }
+}
 
-    try {
-        const response = await fetch(`https://wttr.in/${location}?format=j1`);
-        const data = await response.json();
+async function getWeather(city=null){
+  const weatherDiv = document.getElementById("weather");
+  const cityInput = document.getElementById("city");
+  const location = city || cityInput.value || "Kraksaan";
 
-        const current = data.current_condition[0];
-        const forecast = data.weather;
+  weatherDiv.innerHTML = `<div class="loading">Loading...</div>`;
 
-        weatherDiv.innerHTML = `
-            <div class="weather-main">
-                <div class="temp">${current.temp_C}°C</div>
-                <div class="desc">${current.weatherDesc[0].value}</div>
-                <div>${location}</div>
-            </div>
+  try{
+    const res = await fetch(`https://wttr.in/${location}?format=j1`);
+    const data = await res.json();
 
-            <div class="forecast">
-                ${forecast.slice(0,3).map(day => `
-                    <div class="day">
-                        <h4>${day.date}</h4>
-                        <div>${day.maxtempC}° / ${day.mintempC}°</div>
-                    </div>
-                `).join("")}
-            </div>
-        `;
+    const current = data.current_condition[0];
+    const forecast = data.weather.slice(0,3);
 
-    } catch (error) {
-        weatherDiv.innerHTML = `<div class="loading">Failed to load weather.</div>`;
-    }
+    const temp = unit === "C" ? current.temp_C : current.temp_F;
+    const icon = getIcon(current.weatherDesc[0].value);
+
+    setTheme(new Date().getHours());
+
+    weatherDiv.innerHTML = `
+      <div class="weather-main">
+        <div class="icon">${icon}</div>
+        <div class="temp">${temp}°${unit}</div>
+        <div class="desc">${current.weatherDesc[0].value}</div>
+        <div>${location}</div>
+      </div>
+
+      <div class="forecast">
+        ${forecast.map(day=>`
+          <div class="day-card">
+            <div>${day.date}</div>
+            <div>${unit==="C"?day.maxtempC:day.maxtempF}° / 
+            ${unit==="C"?day.mintempC:day.mintempF}°</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+
+  }catch(e){
+    weatherDiv.innerHTML = `<div class="loading">Failed to load weather</div>`;
+  }
+}
+
+function toggleUnit(){
+  unit = unit === "C" ? "F" : "C";
+  getWeather();
+}
+
+function detectLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      getWeather(`${lat},${lon}`);
+    });
+  }
 }
 
 getWeather();
