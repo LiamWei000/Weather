@@ -1,0 +1,70 @@
+Gebruik:
+
+    $ curl wttr.in              # huidige locatie
+    $ curl wttr.in/muc          # weer op de luchthaven van München
+
+Ondersteunde locatiesoorten:
+
+    /paris                      # stadsnaam
+    /~Eiffel+tower              # elke locatie (+ for spaties)
+    /Москва                     # Unicodenaam van elke locatie in elke taal
+    /muc                        # vliegveldcode (3 letters)
+    /@stackoverflow.com         # domeinnaam
+    /94107                      # gebiedscode
+    /-78.46,106.76              # GPS-coördinaten
+
+Maanstand informatie:
+
+    /moon                       # Maanstand (voeg ,+US of ,+France toe voor deze plekken)
+    /moon@2016-10-25            # Maanstand op deze datum (@2016-10-25)
+
+Eenheden:
+
+    m                          # metriek (SI) (overal gebruikt als standaard behalve in US)
+    u                          # USCS (standaard in US)
+    M                          # laat windsnelheid in m/s zien
+
+Beeld opties:
+
+    0                          # alleen huidig weer
+    1                          # huidig weer + verwachting voor vandaag
+    2                          # huidig weer + verwachting voor vandaag en morgen
+    A                          # negeer User-Agent en forceer ANSI uitvoerformaat (terminal)
+    F                          # Toon niet de "Follow" regel
+    n                          # smalle versie (alleen dag en nacht)
+    q                          # stille versie (geen "Weerbericht" tekst)
+    Q                          # superstille versie (geen "Weerbericht", geen stadsnaam)
+    T                          # schakel terminalcodes uit (geen kleur)
+
+PNG opties:
+
+    /paris.png                  # genereert een PNG-bestand
+    ?p                          # voegt een rand toe rond de uitvoer
+    ?t                          # transparantie 150
+    transparency=...            # transparantie van 0 to 255 (255 is ondoorzichtig)
+    background=...              # achtergrondkleur in formaat RRGGBB, bijv. 00aaaa
+
+  Opties kunnen worden gecombineerd:
+
+      /Paris?0pq
+      /Paris?0pq&lang=fr
+      /Paris_0pq.png          # in PNG het bestandstype specificeren achter _
+      /Rome_0pq_lang=it.png   # lange opties worden gescheiden met _
+
+Lokalisatie:
+
+    $ curl fr.wttr.in/Paris
+    $ curl wttr.in/paris?lang=fr
+    $ curl -H "Accept-Language: fr" wttr.in/paris
+
+Ondersteunde talen:
+
+    FULL_TRANSLATION (supported)
+    PARTIAL_TRANSLATION (in progress)
+
+Speciale URLs:
+
+	/:help						# toon helppagina
+	/:bash.function		# toon voorgestelde wttr() bash-functie
+	/:translation			# toon informatie van de vertalers
+

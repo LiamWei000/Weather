@@ -1,0 +1,66 @@
+Brugsanvisning:
+
+    $ curl wttr.in          # Nuværende lokation
+    $ curl wttr.in/aarhus   # Vejret i Aarhus
+
+Understøttede lokationsspecifikationer:
+
+    /Skanderborg            # Bynavn
+    /~Aarhus+stadion        # Valgfri lokation
+    /Москва                 # Unicode-navn på lokation på alle sprog
+    /cph                    # Flyvepladskode (3 bogstaver)
+    /@stackoverflow.com     # Domænenavn
+    /94107                  # Postnummer (kun USA)
+    /-78.46,106.79          # GPS-koordinater
+
+Særlige lokationer:
+
+    /moon                   # Månefase (brug med ,+US eller ,+France for disse lokationer)
+    /moon@2014-10-26        # Månefase for specifik dato (@2014-10-26)
+
+Enheder:
+
+    ?m                      # Metrisk (SI) (standard alle steder undtagen i USA)
+    ?u                      # USCS (standard i USA)
+    ?M                      # Vindstyrke i meter per sekund
+
+Visningsvalg:
+
+    ?0                      # Øjebliksvejr
+    ?1                      # Øjebliksvejr + 1 dag
+    ?2                      # Øjebliksvejr + 2 dage
+    ?n                      # Simplificeret visning (kun dag og nat)
+    ?q                      # Begrænset visning (ingen "Vejrmelding"-tekst)
+    ?Q                      # Meget begrænset visning (ingen "Vejrmelding", ingen bynavn)
+    ?T                      # Ingen terminalsekvenser (ingen farver)
+
+PNG valg:
+
+    /paris.png              # Generér en PNG-fil
+    ?p                      # Tilføj ramme
+    ?t                      # Sæt gennemsigtighed til 150
+    transparency=...        # Tilpas gennemsigtighed fra 0 til 255 (255 = ikke gennemsigtigt)
+
+Kombinationsmuligheder:
+
+    /Paris?0pq
+    /Paris?0pq&lang=fr
+    /Paris_0pq.png          # For .PNG er fil-modus specificeret efter _
+    /Rome_0pq_lang=it.png   # Sprog defineres efter underscore (_)
+
+Oversættelser:
+
+    $ curl da.wttr.in/Aarhus
+    $ curl wttr.in/aarhus?lang=da
+    $ curl -H "Accept-Language: da" wttr.in/aarhus
+
+Understøttede sprog:
+
+    FULL_TRANSLATION (understøttet)
+    PARTIAL_TRANSLATION (under udarbejdelse)
+
+Særlige URL'er:
+
+    /:help                  # Vis denne side
+    /:bash.function         # Vis den foreslåede bash-funktion wttr()
+    /:translation           # Vis information om oversætterne

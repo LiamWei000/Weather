@@ -1,0 +1,70 @@
+Komut Satırı Kullanımı:
+
+    $ curl wttr.in          # bulunduğunuz konum
+    $ curl wttr.in/esb      # Esenboğa havalimanında hava durumu
+
+Desteklenen konum türleri:
+
+    /istanbul               # şehir adı
+    /~Anıtkabir             # herhangi bir konum (boşluk için + kullanın)
+    /Москва                 # herhangi bir dildeki herhangi bir konumun Unicode adı
+    /esb                    # havalimanı kodu (3 harfli)
+    /@stackoverflow.com     # etki alanı adı
+    /06800                  # posta kodları
+    /39.925325,32.836987    # Yer belirleme sistemi (GPS) koordinatları
+
+Ay evresi bilgisi:
+
+    /moon                   # Ay evresi (bu isimdeki şehirler için ,+US veya ,+France ekleyin)
+    /moon@2016-10-25        # Belirli bir tarih için ay evresi (@2016-10-25)
+
+Ölçü birimleri:
+
+    m                       # metrik sistem (SI) (ABD dışında her yer için varsayılan)
+    u                       # USCS (ABD için varsayılan)
+    M                       # Rüzgar hızını metre/saniye (m/s) olarak göster
+
+Seçenekleri görüntüle:
+
+    0                       # yalnızca bugün için hava durumu
+    1                       # Bugün ve 1 gün sonrası için hava durumu
+    2                       # Bugün ve 2 gün sonrası için hava durumu
+    A                       # Kullanıcı aracısı (User-Agent) bilgilerini göz ardı eder ve terminalde ANSI çıktı biçimini zorlar
+    F                       # "Follow (Takip et)" satırını göstermez
+    n                       # dar görünüm (yalnızca gece ve gündüz)
+    q                       # sessiz görünüm ("Hava durumu" yazısı yok)
+    Q                       # aşırı sessiz görünüm ("Hava durumu" yazısı ve şehir adı yok)
+    T                       # terminal geçişlerini kapatır (renkler yok)
+
+PNG seçenekleri:
+
+    /istanbul.png           # bir PNG dosyası üretir
+    p                       # çıktı etrafına bir çerçeve ekler
+    t                       # 150 birim saydamlık
+    transparency=...        # 0 ila 255 arasında saydamlık (255 = saydam değil)
+    background=...          # KKYYMM biçiminde arka plan rengi, örn. 00aaaa
+
+Seçenekler birleştirilebilir:
+
+    /istanbul?0pq
+    /istanbul?0pq&lang=tr
+    /istanbul_0pq.png       # PNG dosya modları _ karakterinden sonra belirtilir
+    /izmir_0pq_lang=tr.png  # uzun seçenekler alt çizgi ile ayrılır
+
+Yerelleştirme:
+
+    $ curl tr.wttr.in/istanbul
+    $ curl wttr.in/izmir?lang=tr
+    $ curl -H "Accept-Language: tr" wttr.in/izmir
+
+Desteklenen diller:
+
+    FULL_TRANSLATION (destekleniyor)
+    PARTIAL_TRANSLATION (geliştirme aşamasında)
+
+Özel adresler:
+
+    /:help                  # bu sayfayı göster
+    /:bash.function         # tavsiye edilen wttr() bash fonksiyonunu göster
+    /:translation           # çevirmenler hakkındaki bilgileri göster
+
