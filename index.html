@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Responsible disclosure security notification." />
+<meta name="theme-color" content="#000000" />
+<title>Security Notice</title>
+
+<style>
+:root{
+  --bg:#000;
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+  --text:#eaeaea;
+  --accent:#00ffcc;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  overflow:hidden;
+}
+
+/* Animated background glow */
+body::before{
+  content:"";
+  position:fixed;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,var(--accent),transparent 70%);
+  filter:blur(120px);
+  opacity:.15;
+  animation:moveGlow 12s infinite alternate ease-in-out;
+}
+
+@keyframes moveGlow{
+  from{transform:translate(-100px,-50px);}
+  to{transform:translate(150px,80px);}
+}
+
+/* Matrix subtle lines */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,255,204,0.03),
+    rgba(0,255,204,0.03) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+  pointer-events:none;
+}
+
+.container{
+  position:relative;
+  max-width:800px;
+  width:100%;
+  padding:45px 35px;
+  text-align:center;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  backdrop-filter:blur(12px);
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(15px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.logo img{
+  max-width:260px;
+  width:100%;
+  margin-bottom:25px;
+  border-radius:12px;
+  transition:.4s;
+}
+
+.logo img:hover{
+  transform:scale(1.05);
+}
+
+h1{
+  margin-bottom:20px;
+  letter-spacing:1px;
+  font-size:24px;
+}
+
+p{
+  line-height:1.8;
+  font-size:15px;
+  margin-bottom:15px;
+  opacity:.9;
+}
+
+.email a{
+  text-decoration:none;
+  color:var(--accent);
+  font-weight:bold;
+  font-size:16px;
+  transition:.3s;
+}
+
+.email a:hover{
+  text-shadow:0 0 8px var(--accent);
+}
+
+.toggle{
+  margin-top:25px;
+  cursor:pointer;
+  font-size:13px;
+  opacity:.6;
+}
+
+footer{
+  margin-top:30px;
+  font-size:12px;
+  opacity:.5;
+}
+
+@media(max-width:480px){
+  .container{
+    padding:30px 20px;
+  }
+  h1{
+    font-size:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <div class="logo">
+    <img src="https://raw.githubusercontent.com/project-1397/Ms-1397/main/Ms1397-logo.png" 
+         alt="Security Team Logo"
+         loading="lazy">
+  </div>
+
+  <h1 id="title">Security Notice</h1>
+
+  <div id="content-en">
+    <p>
+      This page was created as part of a responsible disclosure process.
+      Our team has no intention of exploiting your system.
+    </p>
+    <p>
+      We identified potential security vulnerabilities that could be misused
+      by unauthorized parties. For detailed technical information and
+      remediation guidance, please contact us.
+    </p>
+  </div>
+
+  <div id="content-id" style="display:none;">
+    <p>
+      Halaman ini dibuat sebagai bagian dari proses responsible disclosure.
+      Tim kami tidak memiliki niat untuk mengeksploitasi sistem Anda.
+    </p>
+    <p>
+      Kami menemukan potensi celah keamanan yang dapat disalahgunakan
+      oleh pihak yang tidak bertanggung jawab. Untuk detail teknis dan
+      rekomendasi perbaikan, silakan hubungi kami.
+    </p>
+  </div>
+
+  <div class="email">
+    <a href="mailto:rmdn1397.05@gmail.com">
+      rmdn1397.05@gmail.com
+    </a>
+  </div>
+
+  <div class="toggle" onclick="toggleLang()">
+    Switch Language (EN / ID)
+  </div>
+
+  <footer>
+    Responsible Disclosure • Security Awareness • 2026
+  </footer>
+
+</main>
+
+<script>
+function toggleLang(){
+  const en=document.getElementById("content-en");
+  const id=document.getElementById("content-id");
+  const title=document.getElementById("title");
+
+  if(en.style.display==="none"){
+    en.style.display="block";
+    id.style.display="none";
+    title.textContent="Security Notice";
+  }else{
+    en.style.display="none";
+    id.style.display="block";
+    title.textContent="Pemberitahuan Keamanan";
+  }
+}
+</script>
+
+</body>
+</html>
