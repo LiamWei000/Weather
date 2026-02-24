@@ -23,7 +23,7 @@ body{
   overflow:hidden;
 }
 
-/* Boot Screen */
+/* Boot */
 #boot{
   position:fixed;
   inset:0;
@@ -34,14 +34,10 @@ body{
   flex-direction:column;
   z-index:999;
   letter-spacing:2px;
+  transition:opacity .6s ease;
 }
-#boot span{
-  opacity:.6;
-  margin-top:10px;
-  font-size:12px;
-}
+#boot.fade{opacity:0;pointer-events:none}
 
-/* Header */
 header{
   padding:20px 40px;
   backdrop-filter:blur(12px);
@@ -81,9 +77,7 @@ canvas{
   border-radius:12px;
 }
 
-.metric{
-  margin-top:15px;
-}
+.metric{margin-top:15px}
 .bar{
   height:8px;
   background:#1a1f2e;
@@ -97,11 +91,11 @@ canvas{
   width:0%;
   transition:.4s;
 }
-.safe{background:var(--accent);}
-.danger{background:var(--danger);}
+.safe{background:var(--accent)}
+.danger{background:var(--danger)}
 
 @media(max-width:900px){
-  .dashboard{grid-template-columns:1fr;}
+  .dashboard{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -118,7 +112,6 @@ canvas{
 </header>
 
 <div class="dashboard">
-
   <div class="card">
     <h3>Predictive Threat Analytics</h3>
     <div class="logs" id="logs"></div>
@@ -143,36 +136,33 @@ canvas{
       <div class="bar"><span id="anomalyBar"></span></div>
     </div>
   </div>
-
 </div>
 
 <script>
-/* ===============================
-   BOOT SEQUENCE
-================================*/
-setTimeout(()=>document.getElementById("boot").style.display="none",2500);
+/* BOOT */
+setTimeout(()=>{
+  const boot=document.getElementById("boot");
+  boot.classList.add("fade");
+  setTimeout(()=>boot.remove(),600);
+},2500);
 
-/* ===============================
-   CLOCK
-================================*/
+/* CLOCK */
+const clock=document.getElementById("clock");
 setInterval(()=>{
-  document.getElementById("clock").textContent=new Date().toISOString();
+  clock.textContent=new Date().toLocaleString();
 },1000);
 
-/* ===============================
-   AI THREAT MODEL
-================================*/
+/* AI MODEL */
 function predictiveModel(){
   const entropy=Math.random();
   const anomaly=Math.random();
   const traffic=Math.random();
 
-  // Real scoring formula
-  const threatScore = (entropy*0.4 + anomaly*0.35 + traffic*0.25)*100;
-  const integrity = 100 - (threatScore * 0.6);
+  const threat=(entropy*0.4 + anomaly*0.35 + traffic*0.25)*100;
+  const integrity=100-(threat*0.6);
 
-  return {
-    threat:Math.min(100,threatScore),
+  return{
+    threat:Math.min(100,threat),
     integrity:Math.max(50,integrity),
     anomaly:anomaly*100
   };
@@ -181,52 +171,63 @@ function predictiveModel(){
 function updateMetrics(){
   const data=predictiveModel();
 
-  const threatBar=document.getElementById("threatBar");
-  threatBar.style.width=data.threat+"%";
-  threatBar.className=data.threat>70?"danger":"safe";
-
-  const integrityBar=document.getElementById("integrityBar");
-  integrityBar.style.width=data.integrity+"%";
-  integrityBar.className="safe";
-
-  const anomalyBar=document.getElementById("anomalyBar");
-  anomalyBar.style.width=data.anomaly+"%";
-  anomalyBar.className=data.anomaly>75?"danger":"safe";
+  updateBar("threatBar",data.threat,70);
+  updateBar("integrityBar",data.integrity,0);
+  updateBar("anomalyBar",data.anomaly,75);
 }
-setInterval(updateMetrics,3000);
 
-/* ===============================
-   LOG ENGINE
-================================*/
+function updateBar(id,value,dangerLimit){
+  const el=document.getElementById(id);
+  el.style.width=value+"%";
+  el.classList.remove("safe","danger");
+  el.classList.add(value>dangerLimit?"danger":"safe");
+}
+
+setInterval(updateMetrics,3000);
+updateMetrics();
+
+/* LOG ENGINE */
 const logs=document.getElementById("logs");
 const events=[
-  "AI neural weight recalibration complete",
+  "AI neural recalibration complete",
   "Predictive anomaly spike detected",
-  "Behavioral deviation pattern recognized",
-  "Encrypted node handshake verified",
-  "Adaptive firewall threshold updated"
+  "Encrypted node verified",
+  "Adaptive firewall updated",
+  "Behavioral deviation recognized"
 ];
+
 setInterval(()=>{
-  const time=new Date().toISOString();
+  const time=new Date().toLocaleTimeString();
   const event=events[Math.floor(Math.random()*events.length)];
-  logs.innerHTML+=`[${time}] ${event}<br>`;
+
+  const line=document.createElement("div");
+  line.textContent=`[${time}] ${event}`;
+  logs.appendChild(line);
+
+  if(logs.children.length>100){
+    logs.removeChild(logs.firstChild);
+  }
+
   logs.scrollTop=logs.scrollHeight;
 },2000);
 
-/* ===============================
-   REAL ANIMATED CHART
-================================*/
+/* RESPONSIVE CHART */
 const canvas=document.getElementById("chart");
 const ctx=canvas.getContext("2d");
-canvas.width=canvas.offsetWidth;
-canvas.height=200;
+
+function resizeCanvas(){
+  canvas.width=canvas.clientWidth;
+  canvas.height=200;
+}
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
 
 let points=[];
 
 function drawChart(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  if(points.length>50) points.shift();
+  if(points.length>60) points.shift();
   points.push(Math.random()*canvas.height);
 
   ctx.beginPath();
@@ -234,10 +235,9 @@ function drawChart(){
   ctx.lineWidth=2;
 
   points.forEach((p,i)=>{
-    const x=i*(canvas.width/50);
+    const x=i*(canvas.width/60);
     const y=canvas.height-p;
-    if(i===0) ctx.moveTo(x,y);
-    else ctx.lineTo(x,y);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
   });
 
   ctx.stroke();
