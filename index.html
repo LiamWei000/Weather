@@ -1,218 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Responsible disclosure security notification." />
-<meta name="theme-color" content="#000000" />
-<title>Security Notice</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Responsible disclosure security notification." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark">
 
-<style>
-:root{
-  --bg:#000;
-  --card:rgba(255,255,255,0.05);
-  --border:rgba(255,255,255,0.1);
-  --text:#eaeaea;
-  --accent:#00ffcc;
-}
+  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+  <title>Security Notice</title>
 
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#000;
-  color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  overflow:hidden;
-}
+  <style>
+    :root {
+      --bg: #000;
+      --card: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #eaeaea;
+      --accent: #00ffcc;
+    }
 
-/* Animated background glow */
-body::before{
-  content:"";
-  position:fixed;
-  width:600px;
-  height:600px;
-  background:radial-gradient(circle,var(--accent),transparent 70%);
-  filter:blur(120px);
-  opacity:.15;
-  animation:moveGlow 12s infinite alternate ease-in-out;
-}
+    /* Reset */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-@keyframes moveGlow{
-  from{transform:translate(-100px,-50px);}
-  to{transform:translate(150px,80px);}
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* Matrix subtle lines */
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:repeating-linear-gradient(
-    0deg,
-    rgba(0,255,204,0.03),
-    rgba(0,255,204,0.03) 1px,
-    transparent 1px,
-    transparent 40px
-  );
-  pointer-events:none;
-}
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
 
-.container{
-  position:relative;
-  max-width:800px;
-  width:100%;
-  padding:45px 35px;
-  text-align:center;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  backdrop-filter:blur(12px);
-  animation:fadeIn 1s ease;
-}
+    /* Glow */
+    body::before {
+      content: "";
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent), transparent 70%);
+      filter: blur(120px);
+      opacity: 0.12;
+      animation: moveGlow 12s infinite alternate ease-in-out;
+      z-index: -1;
+      pointer-events: none;
+      /* Mencegah glow menghalangi klik */
+    }
 
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(15px);}
-  to{opacity:1;transform:translateY(0);}
-}
+    /* Grid */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          rgba(0, 255, 204, 0.03),
+          rgba(0, 255, 204, 0.03) 1px,
+          transparent 1px,
+          transparent 40px);
+      pointer-events: none;
+      z-index: -1;
+    }
 
-.logo img{
-  max-width:260px;
-  width:100%;
-  margin-bottom:25px;
-  border-radius:12px;
-  transition:.4s;
-}
+    @keyframes moveGlow {
+      from {
+        transform: translate(-100px, -50px);
+      }
 
-.logo img:hover{
-  transform:scale(1.05);
-}
+      to {
+        transform: translate(150px, 80px);
+      }
+    }
 
-h1{
-  margin-bottom:20px;
-  letter-spacing:1px;
-  font-size:24px;
-}
+    .container {
+      max-width: 800px;
+      width: 90%;
+      padding: 45px 35px;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      animation: fadeIn 0.8s ease;
+      will-change: transform, opacity;
+    }
 
-p{
-  line-height:1.8;
-  font-size:15px;
-  margin-bottom:15px;
-  opacity:.9;
-}
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
 
-.email a{
-  text-decoration:none;
-  color:var(--accent);
-  font-weight:bold;
-  font-size:16px;
-  transition:.3s;
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.email a:hover{
-  text-shadow:0 0 8px var(--accent);
-}
+    /* Logo */
+    .logo img {
+      max-width: 240px;
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
 
-.toggle{
-  margin-top:25px;
-  cursor:pointer;
-  font-size:13px;
-  opacity:.6;
-}
+    .logo img:hover {
+      transform: scale(1.05);
+    }
 
-footer{
-  margin-top:30px;
-  font-size:12px;
-  opacity:.5;
-}
+    /* Typography */
+    h1 {
+      margin-bottom: 18px;
+      font-size: 24px;
+    }
 
-@media(max-width:480px){
-  .container{
-    padding:30px 20px;
-  }
-  h1{
-    font-size:20px;
-  }
-}
-</style>
+    p {
+      line-height: 1.7;
+      font-size: 15px;
+      margin-bottom: 14px;
+      opacity: 0.9;
+    }
+
+    /* Text Wrapper for Transition */
+    #text-wrapper {
+      transition: opacity .25s ease;
+    }
+
+    #text-wrapper.fade {
+      pointer-events: none;
+    }
+
+    /* Email */
+    .email a {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      transition: text-shadow 0.2s ease;
+    }
+
+    .email a:hover {
+      text-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Button */
+    .toggle {
+      margin-top: 25px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      background: transparent;
+      color: var(--text);
+      transition: 0.25s;
+    }
+
+    .toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 25px;
+      font-size: 12px;
+      opacity: 0.5;
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 18px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<main class="container">
+  <main class="container">
 
-  <div class="logo">
-    <img src="https://raw.githubusercontent.com/project-1397/Ms-1397/main/Ms1397-logo.png" 
-         alt="Security Team Logo"
-         loading="lazy">
-  </div>
+    <div class="logo">
+      <img src="https://raw.githubusercontent.com/project-1397/Ms-1397/main/Ms1397-logo.png" alt="Security Team Logo"
+        loading="lazy" decoding="async">
+    </div>
 
-  <h1 id="title">Security Notice</h1>
+    <div id="text-wrapper">
+      <h1 id="title">Security Notice</h1>
 
-  <div id="content-en">
-    <p>
-      This page was created as part of a responsible disclosure process.
-      Our team has no intention of exploiting your system.
-    </p>
-    <p>
-      We identified potential security vulnerabilities that could be misused
-      by unauthorized parties. For detailed technical information and
-      remediation guidance, please contact us.
-    </p>
-  </div>
+      <section id="content-en">
+        <p>
+          This page was created as part of a responsible disclosure process.
+          Our team has no intention of exploiting your system.
+        </p>
+        <p>
+          We identified potential security vulnerabilities that could be misused
+          by unauthorized parties. Please contact us for further details.
+        </p>
+      </section>
 
-  <div id="content-id" style="display:none;">
-    <p>
-      Halaman ini dibuat sebagai bagian dari proses responsible disclosure.
-      Tim kami tidak memiliki niat untuk mengeksploitasi sistem Anda.
-    </p>
-    <p>
-      Kami menemukan potensi celah keamanan yang dapat disalahgunakan
-      oleh pihak yang tidak bertanggung jawab. Untuk detail teknis dan
-      rekomendasi perbaikan, silakan hubungi kami.
-    </p>
-  </div>
+      <section id="content-id" hidden>
+        <p>
+          Halaman ini dibuat sebagai bagian dari proses responsible disclosure.
+          Tim kami tidak memiliki niat untuk mengeksploitasi sistem Anda.
+        </p>
+        <p>
+          Kami menemukan potensi celah keamanan yang dapat disalahgunakan
+          oleh pihak yang tidak bertanggung jawab. Silakan hubungi kami
+          untuk detail lebih lanjut.
+        </p>
+      </section>
+    </div>
 
-  <div class="email">
-    <a href="mailto:rmdn1397.05@gmail.com">
-      rmdn1397.05@gmail.com
-    </a>
-  </div>
+    <div class="email">
+      <a href="mailto:rmdn1397.05@gmail.com" aria-label="Send email" rel="noopener noreferrer">
+        rmdn1397.05@gmail.com
+      </a>
+    </div>
 
-  <div class="toggle" onclick="toggleLang()">
-    Switch Language (EN / ID)
-  </div>
+    <button class="toggle" id="toggleBtn" aria-pressed="false">
+      Switch to Bahasa Indonesia
+    </button>
 
-  <footer>
-    Responsible Disclosure • Security Awareness • 2026
-  </footer>
+    <footer>
+      Responsible Disclosure • Security Awareness • 2026
+    </footer>
 
-</main>
+  </main>
 
-<script>
-function toggleLang(){
-  const en=document.getElementById("content-en");
-  const id=document.getElementById("content-id");
-  const title=document.getElementById("title");
+  <script>
+    (() => {
+      const en = document.getElementById("content-en");
+      const id = document.getElementById("content-id");
+      const title = document.getElementById("title");
+      const toggleBtn = document.getElementById("toggleBtn");
+      const textWrapper = document.getElementById("text-wrapper");
+      const html = document.documentElement;
 
-  if(en.style.display==="none"){
-    en.style.display="block";
-    id.style.display="none";
-    title.textContent="Security Notice";
-  }else{
-    en.style.display="none";
-    id.style.display="block";
-    title.textContent="Pemberitahuan Keamanan";
-  }
-}
-</script>
+      /* Safe storage */
+      const storage = {
+        get(key) {
+          try { return localStorage.getItem(key); } catch { return null; }
+        },
+        set(key, val) {
+          try { localStorage.setItem(key, val); } catch { }
+        }
+      };
+
+      /* Initial language detection */
+      let isEnglish = true;
+      const saved = storage.get("lang");
+
+      if (saved) {
+        isEnglish = saved === "en";
+      } else {
+        const lang = navigator.language || "";
+        isEnglish = !lang.toLowerCase().startsWith("id");
+      }
+
+      function applyLanguage() {
+        en.hidden = !isEnglish;
+        id.hidden = isEnglish;
+
+        title.textContent = isEnglish
+          ? "Security Notice"
+          : "Pemberitahuan Keamanan";
+
+        toggleBtn.textContent = isEnglish
+          ? "Switch to Bahasa Indonesia"
+          : "Switch to English";
+
+        toggleBtn.setAttribute("aria-pressed", String(!isEnglish));
+        html.lang = isEnglish ? "en" : "id";
+      }
+
+      let isAnimating = false;
+
+      function toggleLang() {
+        if (isAnimating) return; // ⛔ cegah spam klik
+        isAnimating = true;
+
+        isEnglish = !isEnglish;
+        storage.set("lang", isEnglish ? "en" : "id");
+
+        textWrapper.classList.add("fade");
+        textWrapper.style.opacity = "0";
+
+        setTimeout(() => {
+          applyLanguage();
+          textWrapper.style.opacity = "1";
+
+          setTimeout(() => {
+            textWrapper.classList.remove("fade");
+            isAnimating = false;
+          }, 200);
+        }, 200);
+      }
+
+      applyLanguage();
+      toggleBtn.addEventListener("click", toggleLang);
+    })();
+  </script>
 
 </body>
+
 </html>
