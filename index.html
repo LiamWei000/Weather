@@ -2,338 +2,386 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Responsible disclosure security notification." />
-  <meta name="theme-color" content="#000000" />
-  <meta name="color-scheme" content="dark">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance - Coming Back Soon</title>
 
-  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #e2e8f0;
+            --subtext: #94a3b8;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --success: #10b981;
 
-  <title>Security Notice</title>
+            --radius: 24px;
+            --transition: 0.25s ease;
+        }
 
-  <style>
-    :root {
-      --bg: #000;
-      --card: rgba(255, 255, 255, 0.05);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #eaeaea;
-      --accent: #00ffcc;
-    }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
 
-    /* Reset */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        html {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
 
-    html {
-      scroll-behavior: smooth;
-    }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      overflow: hidden;
-    }
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top, #1e293b, transparent 70%);
+            z-index: 0;
+        }
 
-    /* Glow */
-    body::before {
-      content: "";
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, var(--accent), transparent 70%);
-      filter: blur(120px);
-      opacity: 0.12;
-      animation: moveGlow 12s infinite alternate ease-in-out;
-      z-index: -1;
-      pointer-events: none;
-      /* Mencegah glow menghalangi klik */
-    }
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
 
-    /* Grid */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(0deg,
-          rgba(0, 255, 204, 0.03),
-          rgba(0, 255, 204, 0.03) 1px,
-          transparent 1px,
-          transparent 40px);
-      pointer-events: none;
-      z-index: -1;
-    }
+        body::before {
+            top: -10%;
+            left: 10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.4), transparent);
+            animation: float 8s ease-in-out infinite;
+        }
 
-    @keyframes moveGlow {
-      from {
-        transform: translate(-100px, -50px);
-      }
+        body::after {
+            bottom: -10%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent);
+            animation: float 10s ease-in-out infinite reverse;
+        }
 
-      to {
-        transform: translate(150px, 80px);
-      }
-    }
+        @keyframes float {
+            50% {
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
 
-    .container {
-      max-width: 800px;
-      width: 90%;
-      padding: 45px 35px;
-      text-align: center;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      backdrop-filter: blur(12px);
-      animation: fadeIn 0.8s ease;
-      will-change: transform, opacity;
-    }
+        .container {
+            position: relative;
+            z-index: 1;
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
+            padding: 48px 36px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--card);
 
-    /* Logo */
-    .logo img {
-      max-width: 240px;
-      width: 100%;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      transition: transform 0.3s ease;
-    }
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
 
-    .logo img:hover {
-      transform: scale(1.05);
-    }
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 
-    /* Typography */
-    h1 {
-      margin-bottom: 18px;
-      font-size: 24px;
-    }
+            animation: fadeIn 0.7s ease forwards;
+        }
 
-    p {
-      line-height: 1.7;
-      font-size: 15px;
-      margin-bottom: 14px;
-      opacity: 0.9;
-    }
+        @supports not (backdrop-filter: blur(24px)) {
+            .container {
+                background: rgba(2, 6, 23, 0.85);
+            }
+        }
 
-    /* Text Wrapper for Transition */
-    #text-wrapper {
-      transition: opacity .25s ease;
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.96);
+            }
 
-    #text-wrapper.fade {
-      pointer-events: none;
-    }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    /* Email */
-    .email a {
-      display: inline-block;
-      margin-top: 10px;
-      text-decoration: none;
-      color: var(--accent);
-      font-weight: 600;
-      transition: text-shadow 0.2s ease;
-    }
+        .icon {
+            font-size: 60px;
+            margin-bottom: 16px;
+            animation: spin 10s linear infinite;
+        }
 
-    .email a:hover {
-      text-shadow: 0 0 8px var(--accent);
-    }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-    /* Button */
-    .toggle {
-      margin-top: 25px;
-      padding: 10px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      background: transparent;
-      color: var(--text);
-      transition: 0.25s;
-    }
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(20px, 4vw, 26px);
+        }
 
-    .toggle:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
+        p {
+            margin: 0 0 24px;
+            color: var(--subtext);
+            line-height: 1.5;
+        }
 
-    .toggle:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-      background: rgba(255, 255, 255, 0.05);
-    }
+        .countdown {
+            font-size: clamp(28px, 6vw, 38px);
+            font-weight: 800;
+            letter-spacing: 2px;
+            font-variant-numeric: tabular-nums;
 
-    /* Footer */
-    footer {
-      margin-top: 25px;
-      font-size: 12px;
-      opacity: 0.5;
-    }
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    /* Mobile */
-    @media (max-width: 480px) {
-      .container {
-        padding: 25px 18px;
-      }
+        .countdown.done {
+            background: linear-gradient(to right, #34d399, var(--success));
+        }
 
-      h1 {
-        font-size: 20px;
-      }
-    }
+        .progress {
+            height: 8px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 24px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
 
-    /* Reduce motion */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+        .progress-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s linear;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            transition: transform var(--transition), background var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div class="bg-layer"></div>
 
-  <main class="container">
+    <main class="container">
+        <div class="icon" id="gearIcon">⚙️</div>
 
-    <div class="logo">
-      <img src="https://raw.githubusercontent.com/project-1397/Ms-1397/main/Ms1397-logo.png" alt="Security Team Logo"
-        loading="lazy" decoding="async">
-    </div>
+        <h1>Server Maintenance</h1>
+        <p id="statusText">We are currently updating our system...</p>
 
-    <div id="text-wrapper">
-      <h1 id="title">Security Notice</h1>
+        <div class="countdown" id="countdown">00:00</div>
 
-      <section id="content-en">
-        <p>
-          This page was created as part of a responsible disclosure process.
-          Our team has no intention of exploiting your system.
-        </p>
-        <p>
-          We identified potential security vulnerabilities that could be misused
-          by unauthorized parties. Please contact us for further details.
-        </p>
-      </section>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
 
-      <section id="content-id" hidden>
-        <p>
-          Halaman ini dibuat sebagai bagian dari proses responsible disclosure.
-          Tim kami tidak memiliki niat untuk mengeksploitasi sistem Anda.
-        </p>
-        <p>
-          Kami menemukan potensi celah keamanan yang dapat disalahgunakan
-          oleh pihak yang tidak bertanggung jawab. Silakan hubungi kami
-          untuk detail lebih lanjut.
-        </p>
-      </section>
-    </div>
+        <button class="btn" id="reloadBtn">Reload</button>
+    </main>
 
-    <div class="email">
-      <a href="mailto:rmdn1397.05@gmail.com" aria-label="Send email" rel="noopener noreferrer">
-        rmdn1397.05@gmail.com
-      </a>
-    </div>
+    <script>
+        (() => {
+            const CONFIG = {
+                duration: 600,
+                storageKey: "maintenanceEndTime",
+                autoReload: false,
+                tickRate: 1000
+            };
 
-    <button class="toggle" id="toggleBtn" aria-pressed="false">
-      Switch to Bahasa Indonesia
-    </button>
+            const DEBUG = false;
 
-    <footer>
-      Responsible Disclosure • Security Awareness • 2026
-    </footer>
+            if (DEBUG) {
+                localStorage.removeItem(CONFIG.storageKey);
+            }
 
-  </main>
+            const el = {
+                countdown: document.getElementById("countdown"),
+                progress: document.getElementById("progressBar"),
+                btn: document.getElementById("reloadBtn"),
+                status: document.getElementById("statusText"),
+                icon: document.getElementById("gearIcon")
+            };
 
-  <script>
-    (() => {
-      const en = document.getElementById("content-en");
-      const id = document.getElementById("content-id");
-      const title = document.getElementById("title");
-      const toggleBtn = document.getElementById("toggleBtn");
-      const textWrapper = document.getElementById("text-wrapper");
-      const html = document.documentElement;
+            let isActive = true;
 
-      /* Safe storage */
-      const storage = {
-        get(key) {
-          try { return localStorage.getItem(key); } catch { return null; }
-        },
-        set(key, val) {
-          try { localStorage.setItem(key, val); } catch { }
-        }
-      };
+            document.addEventListener("visibilitychange", () => {
+                isActive = !document.hidden;
+            });
 
-      /* Initial language detection */
-      let isEnglish = true;
-      const saved = storage.get("lang");
+            let endTime = Number(localStorage.getItem(CONFIG.storageKey));
+            const now = Date.now();
 
-      if (saved) {
-        isEnglish = saved === "en";
-      } else {
-        const lang = navigator.language || "";
-        isEnglish = !lang.toLowerCase().startsWith("id");
-      }
+            if (!endTime || isNaN(endTime) || endTime < now) {
+                endTime = now + CONFIG.duration * 1000;
+                localStorage.setItem(CONFIG.storageKey, endTime);
+            }
 
-      function applyLanguage() {
-        en.hidden = !isEnglish;
-        id.hidden = isEnglish;
+            el.btn.onclick = () => location.reload();
 
-        title.textContent = isEnglish
-          ? "Security Notice"
-          : "Pemberitahuan Keamanan";
+            let lastSecond = null;
 
-        toggleBtn.textContent = isEnglish
-          ? "Switch to Bahasa Indonesia"
-          : "Switch to English";
+            // 🔥 Accurate time calculation (Date-based)
+            function getTimeParts(from, to) {
+                let start = new Date(from);
+                let end = new Date(to);
 
-        toggleBtn.setAttribute("aria-pressed", String(!isEnglish));
-        html.lang = isEnglish ? "en" : "id";
-      }
+                let y = end.getFullYear() - start.getFullYear();
+                let mo = end.getMonth() - start.getMonth();
+                let d = end.getDate() - start.getDate();
+                let h = end.getHours() - start.getHours();
+                let m = end.getMinutes() - start.getMinutes();
+                let s = end.getSeconds() - start.getSeconds();
 
-      let isAnimating = false;
+                if (s < 0) { s += 60; m--; }
+                if (m < 0) { m += 60; h--; }
+                if (h < 0) { h += 24; d--; }
 
-      function toggleLang() {
-        if (isAnimating) return; // ⛔ cegah spam klik
-        isAnimating = true;
+                if (d < 0) {
+                    const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+                    d += prevMonth.getDate();
+                    mo--;
+                }
 
-        isEnglish = !isEnglish;
-        storage.set("lang", isEnglish ? "en" : "id");
+                if (mo < 0) {
+                    mo += 12;
+                    y--;
+                }
 
-        textWrapper.classList.add("fade");
-        textWrapper.style.opacity = "0";
+                return { y, mo, d, h, m, s };
+            }
 
-        setTimeout(() => {
-          applyLanguage();
-          textWrapper.style.opacity = "1";
+            function formatTime(parts) {
+                let result = "";
 
-          setTimeout(() => {
-            textWrapper.classList.remove("fade");
-            isAnimating = false;
-          }, 200);
-        }, 200);
-      }
+                if (parts.y) result += parts.y + "y ";
+                if (parts.mo) result += parts.mo + "mo ";
+                if (parts.d) result += parts.d + "d ";
 
-      applyLanguage();
-      toggleBtn.addEventListener("click", toggleLang);
-    })();
-  </script>
+                result +=
+                    String(parts.h).padStart(2, "0") + ":" +
+                    String(parts.m).padStart(2, "0") + ":" +
+                    String(parts.s).padStart(2, "0");
+
+                return result;
+            }
+
+            function updateUI(remaining) {
+                const total = CONFIG.duration * 1000;
+                const percent = Math.min(100, Math.max(0, (remaining / total) * 100));
+
+                if (el.progress.style.width !== percent + "%") {
+                    el.progress.style.width = percent + "%";
+                }
+
+                const seconds = Math.floor(remaining / 1000);
+
+                if (seconds !== lastSecond) {
+                    lastSecond = seconds;
+
+                    const parts = getTimeParts(Date.now(), endTime);
+                    el.countdown.textContent = formatTime(parts);
+                }
+            }
+
+            function finish() {
+                localStorage.removeItem(CONFIG.storageKey);
+
+                el.countdown.textContent = "00:00:00";
+                el.countdown.classList.add("done");
+
+                el.status.textContent = "Maintenance completed";
+                el.icon.style.animation = "none";
+
+                el.btn.textContent = "Enter";
+
+                document.body.style.cursor = "pointer";
+
+                if (CONFIG.autoReload) {
+                    setTimeout(() => location.reload(), 1000);
+                }
+            }
+
+            function loop() {
+                if (!isActive) {
+                    requestAnimationFrame(loop);
+                    return;
+                }
+
+                const remaining = Math.max(0, endTime - Date.now());
+
+                if (remaining === 0) {
+                    finish();
+                    return;
+                }
+
+                updateUI(remaining);
+                requestAnimationFrame(loop);
+            }
+
+            if (CONFIG.duration <= 0) {
+                finish();
+                return;
+            }
+
+            loop();
+
+            window.addEventListener("storage", (e) => {
+                if (e.key === CONFIG.storageKey) {
+                    location.reload();
+                }
+            });
+
+        })();
+    </script>
 
 </body>
 
